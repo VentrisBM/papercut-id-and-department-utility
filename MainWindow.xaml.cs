@@ -30,7 +30,7 @@ namespace PaperCutUtility
         string specificUsername;
 
         ServerCommandProxy serverProxy;
-        bool inputIsValid;
+        bool inputIsValid = false;
         string[] existingUsers;
         string[] newCardNumbers;
 
@@ -42,50 +42,49 @@ namespace PaperCutUtility
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
             txtblockOutput.Inlines.Clear();
-            try
+
+            ppcHostname = txtboxPpcServer.Text;
+            if (String.IsNullOrEmpty(ppcHostname))
             {
-                ppcHostname = txtboxPpcServer.Text;
-                if (String.IsNullOrEmpty(ppcHostname))
-                {
-                    txtblockOutput.Inlines.Add("You must enter the PaperCut server hostname.\r\n");
-                }
+                txtblockOutput.Inlines.Add("You must enter the PaperCut server hostname.\r\n");
+            }
 
-                ppcAdminPw = pwdboxPpcAdminPw.Password;
-                if (String.IsNullOrEmpty(ppcAdminPw))
-                {
-                    txtblockOutput.Inlines.Add("You must enter the PaperCut admin password.\r\n");
-                }
+            ppcAdminPw = pwdboxPpcAdminPw.Password;
+            if (String.IsNullOrEmpty(ppcAdminPw))
+            {
+                txtblockOutput.Inlines.Add("You must enter the PaperCut admin password.\r\n");
+            }
 
-                targetIdField = cmboxFieldToUpdate.SelectedIndex;
+            targetIdField = cmboxFieldToUpdate.SelectedIndex;
+            updateOnlyIfBlank = chckboxUpdateIfBlank.IsChecked.Value;
+            mustTargetSpecificUsername = chckboxTargetSpecificUser.IsChecked.Value;
+            specificUsername = txtboxTargetSpecificUser.Text;
 
+            do
+            {
                 try
                 {
                     numberOfChars = Int16.Parse(txtboxNumberOfChars.Text.ToString());
                     if (numberOfChars < 4 || numberOfChars > 10)
-                        throw new Exception();
+                    {
+                        txtblockOutput.Inlines.Add("You must enter a number between 4 and 10.\r\n");
+                        return;
+                    }
+                    else
+                    {
+                        inputIsValid = true;
+                        continue;
+                    }
                 }
                 catch (Exception ex)
                 {
                     txtblockOutput.Inlines.Add("You must enter a number between 4 and 10.\r\n");
+                    return;
                 }
-
-                updateOnlyIfBlank = chckboxUpdateIfBlank.IsChecked.Value;
-                mustTargetSpecificUsername = chckboxTargetSpecificUser.IsChecked.Value;
-                specificUsername = txtboxTargetSpecificUser.Text;
-
-                inputIsValid = true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace);
-                inputIsValid = false;
-            }
+            } while (!inputIsValid);
 
             try
             {
-                if (!inputIsValid)
-                    throw new Exception();
-
                 serverProxy = new ServerCommandProxy(ppcHostname, 9191, ppcAdminPw);
                 if (PaperCutProxyWrapper.ConnectionEstablished(serverProxy))
                 {
@@ -109,7 +108,7 @@ namespace PaperCutUtility
                             else
                             {
                                 txtblockOutput.Inlines.Add(String.Format("Cannot update user: {0},\r\n"
-                                                            + "existing cardNumber: {1}\r\n", specificUsername, existingCardNumber));
+                                                            + "due to existing cardNumber: {1}\r\n", specificUsername, existingCardNumber));
                             }
                         }
                         else
@@ -126,27 +125,38 @@ namespace PaperCutUtility
 
                         if (updateOnlyIfBlank)
                         {
-                            int userCount = 0;
+                            int updatedCount = 0;
                             int skippedCount = 0;
                             string[] existingCardNumbers;
                             existingCardNumbers = PaperCutProxyWrapper.GetCardNumbers(serverProxy, existingUsers, targetIdField);
 
+                            Console.WriteLine("Checking users and updating only if no existing card number exists...");
+                            Console.WriteLine("########################################");
                             for (int i = 0; i < existingUsers.Length; i++)
                             {
                                 if (String.IsNullOrEmpty(existingCardNumbers[i]))
                                 {
                                     PaperCutProxyWrapper.SetCardNumber(serverProxy, existingUsers[i], newCardNumbers[i], targetIdField);
                                     //Console.WriteLine("#{0}/{1} updated username: {2}, existing cardNumber: {3}", i, existingUsers.Length - 1, existingUsers[i], existingCardNumbers[i]);
-                                    userCount++;
+                                    updatedCount++;
+                                    if (updatedCount != 0 && updatedCount % 100 == 0)
+                                    {
+                                        Console.WriteLine("Updated {0} users so far...", updatedCount);
+                                    }
                                 }
                                 else
                                 {
-                                    skippedCount++;
                                     //Console.WriteLine("#{0}/{1} skipped username: {2}, existing cardNumber: {3}", i, existingUsers.Length - 1, existingUsers[i], existingCardNumbers[i]);
+                                    skippedCount++;
+                                    if (skippedCount != 0 && skippedCount % 100 == 0)
+                                    {
+                                        Console.WriteLine("Skipped {0} users so far...", skippedCount);
+                                    }
                                 }
                             }
                             txtblockOutput.Inlines.Add(String.Format("Updated {0} users with new card numbers,\r\n"
-                                                        + "skipped {1} users with existing card numbers.\r\n", userCount, skippedCount));
+                                                        + "skipped {1} users with existing card numbers.\r\n", updatedCount, skippedCount));
+                            Console.WriteLine("########################################");
                         }
                         else
                         {

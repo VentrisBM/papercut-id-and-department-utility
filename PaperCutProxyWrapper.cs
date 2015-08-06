@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
 
 namespace PaperCutUtility
 {
@@ -69,7 +67,7 @@ namespace PaperCutUtility
             try
             {
                 Console.WriteLine("Retrieving existing card numbers...");
-                Console.WriteLine("########################################\r\n");
+                Console.WriteLine("########################################");
                 for (int i = 0; i < usernames.Length; i++)
                 {
                     string currentCard = serverProxy.GetUserProperty(usernames[i], fieldToRetrieve);
