@@ -88,6 +88,65 @@ namespace PaperCutUtility
         }
 
         /// <summary>
+        /// Returns a users email address.
+        /// </summary>
+        ///
+        /// <returns>
+        /// A string containing the users email address, 
+        /// or a blank string if the operation was unsuccessful.
+        /// </returns>
+        internal static string GetEmailAddress(ServerCommandProxy serverProxy, string username)
+        {
+            string emailAddress = "";
+
+            try
+            {
+                emailAddress = serverProxy.GetUserProperty(username, "email");
+                return emailAddress;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                return emailAddress;
+            }
+        }
+
+        /// <summary>
+        /// Returns all of the existing email addresses from PaperCut.
+        /// </summary>
+        ///
+        /// <returns>
+        /// An array of strings that contains all of the existing email 
+        /// addresses for all of the users in PaperCut.
+        /// </returns>
+        internal static string[] GetEmailAddresses(ServerCommandProxy serverProxy, string[] usernames)
+        {
+            string[] emailAddresses = new string[usernames.Length];
+
+            try
+            {
+                Console.WriteLine("Retrieving email addresses...");
+                Console.WriteLine("########################################");
+                for (int i = 0; i < usernames.Length; i++)
+                {
+                    string currentEmail = serverProxy.GetUserProperty(usernames[i], "email");
+                    emailAddresses[i] = currentEmail.ToString();
+                    if (i != 0 && i % 100 == 0)
+                    {
+                        Console.WriteLine("Retrieved {0} email addresses so far...", i);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
+
+            Console.WriteLine("########################################\r\n");
+            return emailAddresses;
+        }
+
+        /// <summary>
         /// Clears the card number for a specific user.
         /// </summary>
         internal static void ClearCardNumber(ServerCommandProxy serverProxy, string username, int cardFieldToUpdate)
@@ -124,7 +183,6 @@ namespace PaperCutUtility
                         clearCount++;
                     }
                     serverProxy.SetUserProperty(usernames[i], fieldToUpdate, "");
-                    // Console.WriteLine("#{0}/{1} username: {2}, cardNumber: {3}", i + 1, usernames.Length, usernames[i], "");
                 }
                 Console.WriteLine("Cleared {0} card numbers.", clearCount);
             }
@@ -135,14 +193,13 @@ namespace PaperCutUtility
         }   // end ClearCardNumbers
 
         /// <summary>
-        /// Sets the card number for a specific user.
+        /// Sets the ID number for a specific user.
         /// </summary>
         internal static void SetCardNumber(ServerCommandProxy serverProxy, string username, string cardNumber, int cardFieldToUpdate)
         {
             string fieldToUpdate = PaperCutProxyWrapper.ResolveCardField(cardFieldToUpdate);
             try
             {
-                Console.WriteLine("Updated username: {0}, new cardNumber: {1}", username, cardNumber);
                 serverProxy.SetUserProperty(username, fieldToUpdate, cardNumber);
             }
             catch (Exception ex)
@@ -152,7 +209,7 @@ namespace PaperCutUtility
         }   // endSetCardNumber
 
         /// <summary>
-        /// Sets the card numbers for all users.
+        /// Sets the ID numbers for all users.
         /// </summary>
         internal static void SetCardNumbers(ServerCommandProxy serverProxy, string[] usernames, string[] cardNumbers, int cardFieldToUpdate)
         {
@@ -163,7 +220,7 @@ namespace PaperCutUtility
                 for (int i = 0; i < usernames.Length; i++)
                 {
                     serverProxy.SetUserProperty(usernames[i], fieldToUpdate, cardNumbers[i]);
-                    Console.WriteLine("#{0}/{1} updated username: {2}, new cardNumber: {3}", i + 1, usernames.Length, usernames[i], cardNumbers[i]);
+                    Console.WriteLine("#{0}/{1} updated username: {2}, new card number: {3}", i + 1, usernames.Length, usernames[i], cardNumbers[i]);
                 }
             }
             catch (Exception ex)
@@ -224,7 +281,6 @@ namespace PaperCutUtility
                     {
                         maxUsersInBatch = remainingUsers;
                     }
-                    //Console.WriteLine("Remaining users: {0}", remainingUsers);
                 } while (remainingUsers > 0);
             }
             return allUsers;

@@ -1,28 +1,33 @@
 ﻿<Window x:Name="PaperCutUtilityMainWindow" x:Class="PaperCutUtility.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="PaperCut ID Utility" Height="460" Width="380" WindowStartupLocation="CenterScreen" Background="White" BorderBrush="Black">
-    <Grid>
-        <Label x:Name="lblPpcServer" Content="PaperCut Server:&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26"/>
-        <TextBox x:Name="txtboxPpcServer" HorizontalAlignment="Left" Height="25" Margin="144,11,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110" ToolTip="Enter the PaperCut application server hostname"/>
-        <Label x:Name="lblPpcAdminPw" Content="PaperCut Admin PW:" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top"/>
-        <PasswordBox x:Name="pwdboxPpcAdminPw" HorizontalAlignment="Left" Margin="144,46,0,0" VerticalAlignment="Top" Width="110" Height="25" ToolTip="Enter the PaperCut admin password"/>
-        <CheckBox x:Name="chckboxUpdateIfBlank" Content="Only update if blank" HorizontalAlignment="Left" Margin="13,144,0,0" VerticalAlignment="Top"/>
-        <Separator HorizontalAlignment="Left" Height="5" Margin="0,76,0,0" VerticalAlignment="Top" Width="372"/>
-        <Label x:Name="lblIDGenerationSettings" Content="ID generation settings:" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cmboxFieldToUpdate" HorizontalAlignment="Left" Margin="144,109,0,0" VerticalAlignment="Top" Width="120" IsReadOnly="True">
+        Title="PaperCut ID Utility" Height="475" Width="380" WindowStartupLocation="CenterScreen" Background="White" BorderBrush="Black">
+    <Grid Margin="0,0,0,-73">
+        <Label x:Name="lblPpcServer" Content="PaperCut Server:&#xD;&#xA;" HorizontalAlignment="Left" Margin="2,10,0,0" VerticalAlignment="Top" Height="26"/>
+        <TextBox x:Name="txtboxPpcServer" HorizontalAlignment="Left" Height="23" Margin="132,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110" ToolTip="Enter the PaperCut application server hostname"/>
+        <Label x:Name="lblPpcAdminPw" Content="PaperCut Admin PW:" HorizontalAlignment="Left" Margin="2,36,0,0" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="pwdboxPpcAdminPw" HorizontalAlignment="Left" Margin="132,37,0,0" VerticalAlignment="Top" Width="110" Height="23" ToolTip="Enter the PaperCut admin password"/>
+        <CheckBox x:Name="chckboxUpdateIfBlank" Content="Only Update If ID Is Blank" HorizontalAlignment="Left" Margin="2,108,0,0" VerticalAlignment="Top"/>
+        <Separator HorizontalAlignment="Left" Height="5" Margin="0,67,0,0" VerticalAlignment="Top" Width="372"/>
+        <ComboBox x:Name="cmboxTargetIDField" HorizontalAlignment="Left" Margin="97,77,0,0" VerticalAlignment="Top" Width="83" IsReadOnly="True">
             <ComboBoxItem Content="Primary" IsSelected="True"/>
             <ComboBoxItem Content="Secondary"/>
         </ComboBox>
-        <Label x:Name="lblFieldToUpdate" Content="Update which ID field?" HorizontalAlignment="Left" Margin="10,107,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblNumberOfChars" Content="Number of characters:" HorizontalAlignment="Left" Margin="10,174,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtboxNumberOfChars" HorizontalAlignment="Left" Height="25" Margin="144,174,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="35" ToolTip="Enter how many characters must be in the ID"/>
-        <Label x:Name="lblTargetSpecificUser" Content="Username:" HorizontalAlignment="Left" Margin="145,210,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="chckboxTargetSpecificUser" Content="Target specific user" HorizontalAlignment="Left" Margin="13,216,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtboxTargetSpecificUser" HorizontalAlignment="Left" Height="25" Margin="216,211,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"/>
-        <TextBlock x:Name="txtblockOutput" HorizontalAlignment="Left" Margin="10,294,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="125" Width="352"/>
-        <Separator HorizontalAlignment="Left" Height="5" Margin="0,284,0,0" VerticalAlignment="Top" Width="372"/>
-        <Button x:Name="btnUpdate" Content="Update" HorizontalAlignment="Left" Margin="145,249,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.613,0.6" Click="btnUpdate_Click"/>
+        <Label x:Name="lblFieldToUpdate" Content="Target ID Field:" HorizontalAlignment="Left" Margin="2,76,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblNumberOfChars" Content="ID Length:" HorizontalAlignment="Left" Margin="196,75,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtboxIDLength" HorizontalAlignment="Left" Height="23" Margin="265,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="35" ToolTip="Enter how many characters must be in the ID" RenderTransformOrigin="0.429,0.5"/>
+        <Label x:Name="lblTargetSpecificUser" Content="Target Username:" HorizontalAlignment="Left" Margin="2,159,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="chckboxTargetSpecificUser" Content="Target Specific User" HorizontalAlignment="Left" Margin="2,135,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtboxTargetSpecificUser" HorizontalAlignment="Left" Height="23" Margin="110,159,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"/>
+        <TextBlock x:Name="txtblockOutput" HorizontalAlignment="Left" Margin="10,267,0,87" TextWrapping="Wrap" Width="352"/>
+        <Separator HorizontalAlignment="Left" Height="5" Margin="2,257,-2,0" VerticalAlignment="Top" Width="372"/>
+        <Button x:Name="btnUpdate" Content="Update" HorizontalAlignment="Left" Margin="252,132,0,0" VerticalAlignment="Top" Width="76" RenderTransformOrigin="0.613,0.6" Click="btnUpdate_Click"/>
+        <Separator HorizontalAlignment="Left" Height="5" Margin="2,190,-2,0" VerticalAlignment="Top" Width="372"/>
+        <Label x:Name="lblSmtpServer" Content="SMTP Server:" HorizontalAlignment="Left" Margin="2,200,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtboxSmtpServer" HorizontalAlignment="Left" Height="23" Margin="110,201,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"/>
+        <Label x:Name="lblSenderAddress" Content="Sender Address:" HorizontalAlignment="Left" Margin="2,226,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtboxSenderAddress" HorizontalAlignment="Left" Height="23" Margin="110,229,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"/>
+        <Button x:Name="btnSendEmail" Content="Send Email" HorizontalAlignment="Left" Margin="253,215,0,0" VerticalAlignment="Top" Width="75" Click="btnSendEmail_Click"/>
 
     </Grid>
 </Window>
