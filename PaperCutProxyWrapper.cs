@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using PaperCutUtility.Models;
 
 namespace PaperCutUtility
 {
@@ -67,7 +68,7 @@ namespace PaperCutUtility
             try
             {
                 Console.WriteLine("Retrieving existing card numbers...");
-                Console.WriteLine("########################################");
+                Console.WriteLine("########################################\n");
                 for (int i = 0; i < usernames.Length; i++)
                 {
                     string currentCard = serverProxy.GetUserProperty(usernames[i], fieldToRetrieve);
@@ -83,7 +84,7 @@ namespace PaperCutUtility
                 Console.WriteLine(ex.StackTrace);
             }
 
-            Console.WriteLine("########################################\r\n");
+            Console.WriteLine("\n########################################\r\n");
             return cardNumbers;
         }
 
@@ -154,9 +155,11 @@ namespace PaperCutUtility
             string fieldToUpdate = PaperCutProxyWrapper.ResolveCardField(cardFieldToUpdate);
             try
             {
-                Console.WriteLine("Clearing {0} for username {1}\r\n.)", fieldToUpdate, username);
+                Console.WriteLine("Clearing {0} for username {1}.)", fieldToUpdate, username);
+                Console.WriteLine("########################################\r\n");
                 serverProxy.SetUserProperty(username, fieldToUpdate, "");
                 Console.WriteLine("Clear successful.");
+                Console.WriteLine("########################################\r\n");
             }
             catch (Exception ex)
             {
@@ -167,30 +170,64 @@ namespace PaperCutUtility
         /// <summary>
         /// Clears the card numbers all of users.
         /// </summary>
-        internal static void ClearCardNumbers(ServerCommandProxy serverProxy, string[] usernames, int cardFieldToUpdate)
+        internal static void ClearCardNumbers(ServerCommandProxy serverProxy, int cardFieldToUpdate)
         {
+            string[] usernames = PaperCutProxyWrapper.GetUserAccounts(serverProxy);
             string fieldToUpdate = PaperCutProxyWrapper.ResolveCardField(cardFieldToUpdate);
             int clearCount = 0;
 
             try
             {
-                Console.WriteLine("Clearing {0} for {0} usernames\r\n.)", fieldToUpdate, usernames.Length);
+                Console.WriteLine("Clearing {0} for {0} users.)", fieldToUpdate, usernames.Length);
+                Console.WriteLine("########################################\r\n");
                 for (int i = 0; i < usernames.Length; i++)
                 {
                     if (i != 0 && i % 100 == 0)
                     {
                         Console.WriteLine("Cleared {0} card numbers so far...", i);
-                        clearCount++;
                     }
                     serverProxy.SetUserProperty(usernames[i], fieldToUpdate, "");
+                    clearCount++;
                 }
-                Console.WriteLine("Cleared {0} card numbers.", clearCount);
+                Console.WriteLine("\nCleared card numbers for {0} users.", clearCount);
+                Console.WriteLine("########################################\r\n");
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.StackTrace);
             }
         }   // end ClearCardNumbers
+
+        /// <summary>
+        /// Clears the selected department information for all users.
+        /// </summary>
+        internal static void ClearUsersDepartmentInfo(ServerCommandProxy serverProxy, int targetDepartmentField)
+        {
+            string[] users = PaperCutProxyWrapper.GetUserAccounts(serverProxy);
+            string fieldToUpdate = PaperCutProxyWrapper.ResolveDepartmentField(targetDepartmentField);
+            int clearCount = 0;
+
+            try
+            {
+                Console.WriteLine("Clearing {0} for {1} users...", fieldToUpdate, users.Length);
+                Console.WriteLine("########################################\r\n");
+                for (int i = 0; i < users.Length; i++)
+                {
+                    if (i != 0 && i % 100 == 0)
+                    {
+                        Console.WriteLine("Cleared {0} {1} properties so far...", i, fieldToUpdate);
+                    }
+                    serverProxy.SetUserProperty(users[i], fieldToUpdate, "");
+                    clearCount++;
+                }
+                Console.WriteLine("\nCleared {0}s for {1} users.", fieldToUpdate, clearCount);
+                Console.WriteLine("########################################\r\n");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
+        }
 
         /// <summary>
         /// Sets the ID number for a specific user.
@@ -286,6 +323,102 @@ namespace PaperCutUtility
             return allUsers;
         }   // end GetUserAccounts
 
+        /// <summary>
+        /// Returns all of the users in PaperCut, 
+        /// as well as their departmental information.
+        /// </summary>
+        ///
+        /// <returns>
+        /// An array of PpcUser that contains all the users
+        ///  in PaperCut and their department information.
+        /// </returns>
+        internal static PpcUser[] GetUsersDepartmentInfo(ServerCommandProxy serverProxy)
+        {
+            string[] allUsers = GetUserAccounts(serverProxy);
+            PpcUser[] allUsersWithDeptInfo = new PpcUser[allUsers.Length];
+            string[] propertiesToFetch = { "department", "office" };
+            string[] retrievedProperties = new string[2];
+
+            Console.WriteLine("Retrieving department information \nfor {0} PaperCut users...", allUsers.Length);
+            Console.WriteLine("########################################\r\n");
+            for (int i = 0; i < allUsersWithDeptInfo.Length; i++)
+            {
+                try
+                {
+                    allUsersWithDeptInfo[i] = new PpcUser();
+                    allUsersWithDeptInfo[i].Username = allUsers[i];
+                    retrievedProperties = serverProxy.GetUserProperties(allUsersWithDeptInfo[i].Username, propertiesToFetch);
+
+                    allUsersWithDeptInfo[i].Department = retrievedProperties[0];
+                    allUsersWithDeptInfo[i].Department = retrievedProperties[1];
+
+                    if (i != 0 && i % 100 == 0)
+                    {
+                        Console.WriteLine("Retrieved {0} users so far...", i);
+                    }
+                    
+                    if (i == allUsersWithDeptInfo.Length - 1)
+                    {
+                        Console.WriteLine("\nRetrieved {0} users.", allUsersWithDeptInfo.Length);
+                        Console.WriteLine("########################################\r\n");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.StackTrace);
+                }
+            }
+
+            return allUsersWithDeptInfo;
+        }
+
+        /// <summary>
+        /// Combines and sets multiple department information for all users in papercut.
+        /// </summary>
+        internal static void SetUsersMultipleDepartmentInfo(ServerCommandProxy serverProxy, LdapUser[] ldapUsers, int targetDepartmentField)
+        {
+            string fieldToUpdate = PaperCutProxyWrapper.ResolveDepartmentField(targetDepartmentField);
+
+            try
+            {
+                for (int i = 0; i < ldapUsers.Length; i++)
+                {
+                    string combinedDepartment = ldapUsers[i].DepartmentNumber + " - " + ldapUsers[i].DepartmentName;
+                    serverProxy.SetUserProperty(ldapUsers[i].Username, fieldToUpdate, combinedDepartment);
+                    Console.WriteLine("#{0}/{1} updated username: {2}, new department: {3}",
+                        i + 1, ldapUsers.Length, ldapUsers[i].Username, combinedDepartment);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
+            Console.WriteLine("\nUpdated {0} users with new card departments.", ldapUsers.Length);
+            Console.WriteLine("########################################\r\n");
+        }
+
+        /// <summary>
+        /// Sets a single department information for all users in papercut.
+        /// </summary>
+        internal static void SetUsersSingleDepartmentInfo(ServerCommandProxy serverProxy, LdapUser[] ldapUsers, int targetDepartmentField)
+        {
+            string fieldToUpdate = PaperCutProxyWrapper.ResolveDepartmentField(targetDepartmentField);
+
+            try
+            {
+                for (int i = 0; i < ldapUsers.Length; i++)
+                {
+                    serverProxy.SetUserProperty(ldapUsers[i].Username, fieldToUpdate, ldapUsers[i].DepartmentName);
+                    Console.WriteLine("#{0}/{1} updated username: {2}, new department: {3}",
+                        i + 1, ldapUsers.Length, ldapUsers[i].Username, ldapUsers[i].DepartmentName);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
+            Console.WriteLine("\n########################################\r\n");
+        }
 
         /// <summary>
         /// Resolves which cardField must be updated.
@@ -309,5 +442,27 @@ namespace PaperCutUtility
             return fieldToUpdate;
         }
 
-    }   // end class
+        /// <summary>
+        /// Resolves which department field must be updated.
+        /// </summary>
+        ///
+        /// <returns>
+        /// A string that contains the correct department property name.
+        /// </returns>
+        internal static string ResolveDepartmentField(int cardFieldToUpdate)
+        {
+            string fieldToUpdate = "";
+            switch (cardFieldToUpdate)
+            {
+                case 0:
+                    fieldToUpdate = "department";
+                    break;
+                case 1:
+                    fieldToUpdate = "office";
+                    break;
+            }
+            return fieldToUpdate;
+        }
+
+    }   // end class PapercutProxyWrapper
 }

@@ -8,11 +8,11 @@ using System.Windows.Controls;
 
 namespace PaperCutUtility
 {
-    class PaperCutUtilityHelper
+    class PaperCutHelper
     {
         ServerCommandProxy _serverProxy;
 
-        public PaperCutUtilityHelper(ServerCommandProxy serverProxy)
+        public PaperCutHelper(ServerCommandProxy serverProxy)
         {
             this._serverProxy = serverProxy;
         }
@@ -32,17 +32,20 @@ namespace PaperCutUtility
                     PaperCutProxyWrapper.SetCardNumber(_serverProxy, targetUsername, newCardNumber, targetIdField);
                     Console.WriteLine("Updated user: {0}, new card number: {1}\r\n", 
                         targetUsername, newCardNumber);
+                    Console.WriteLine("########################################\r\n");
                 }
                 else
                 {
                     Console.WriteLine("Cannot update user: {0} due to existing card number: {1}\r\n",
                         targetUsername, existingCardNumber);
+                    Console.WriteLine("########################################\r\n");
                 }
             }
             else
             {
                 PaperCutProxyWrapper.SetCardNumber(_serverProxy, targetUsername, newCardNumber, targetIdField);
                 Console.WriteLine("Updated user: {0}, new card number: {1}\r\n", targetUsername, newCardNumber);
+                Console.WriteLine("\n########################################\r\n");
             }
         }
 
@@ -93,7 +96,8 @@ namespace PaperCutUtility
             else
             {
                 PaperCutProxyWrapper.SetCardNumbers(_serverProxy, existingUsers, newCardNumbers, targetIdField);
-                Console.WriteLine("Updated {0} users with new card numbers.\r\n", existingUsers.Length);
+                Console.WriteLine("\nUpdated {0} users with new card numbers.", existingUsers.Length);
+                Console.WriteLine("\n########################################\r\n");
             }
         }
 
@@ -120,7 +124,7 @@ namespace PaperCutUtility
                 mail.Body = String.Format("Your PaperCut ID is {0}. Please keep this confidential.", retrievedId);
                 client.Send(mail);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Console.WriteLine("Unable to send email.");
             }
@@ -165,7 +169,8 @@ namespace PaperCutUtility
             {
                 Console.WriteLine("Unable to send email.");
             }
-        }
 
-    }
+        }   // end SendMultipleEmails
+
+    }   // end class PaperCutHelper
 }
