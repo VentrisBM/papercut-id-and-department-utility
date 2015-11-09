@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PaperCutUtility.Models
 {
@@ -24,5 +20,5 @@ namespace PaperCutUtility.Models
             return String.Format("Username: {0}, Department: {1}, Office: {2}",
                         this.Username, this.Department, this.Office);
         }
-    }
+    }   // end class PpcUser
 }

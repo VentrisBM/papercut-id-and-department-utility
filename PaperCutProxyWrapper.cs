@@ -86,7 +86,7 @@ namespace PaperCutUtility
 
             Console.WriteLine("\n########################################\r\n");
             return cardNumbers;
-        }
+        }   // end GetCardNumbers
 
         /// <summary>
         /// Returns a users email address.
@@ -110,7 +110,7 @@ namespace PaperCutUtility
                 Console.WriteLine(ex.StackTrace);
                 return emailAddress;
             }
-        }
+        }   // end GetEmailAddress
 
         /// <summary>
         /// Returns all of the existing email addresses from PaperCut.
@@ -145,7 +145,7 @@ namespace PaperCutUtility
 
             Console.WriteLine("########################################\r\n");
             return emailAddresses;
-        }
+        }   // end GetEmailAddresses
 
         /// <summary>
         /// Clears the card number for a specific user.
@@ -165,7 +165,7 @@ namespace PaperCutUtility
             {
                 Console.WriteLine(ex.StackTrace);
             }
-        }   // endClearCardNumber
+        }   // end ClearCardNumber
 
         /// <summary>
         /// Clears the card numbers all of users.
@@ -227,7 +227,7 @@ namespace PaperCutUtility
             {
                 Console.WriteLine(ex.StackTrace);
             }
-        }
+        }   // end ClearUsersDepartmentInfo
 
         /// <summary>
         /// Sets the ID number for a specific user.
@@ -243,7 +243,7 @@ namespace PaperCutUtility
             {
                 Console.WriteLine(ex.StackTrace);
             }
-        }   // endSetCardNumber
+        }   // end SetCardNumber
 
         /// <summary>
         /// Sets the ID numbers for all users.
@@ -320,6 +320,7 @@ namespace PaperCutUtility
                     }
                 } while (remainingUsers > 0);
             }
+
             return allUsers;
         }   // end GetUserAccounts
 
@@ -370,7 +371,7 @@ namespace PaperCutUtility
             }
 
             return allUsersWithDeptInfo;
-        }
+        }   // end GetUsersDepartmentInfo
 
         /// <summary>
         /// Combines and sets multiple department information for all users in papercut.
@@ -395,7 +396,7 @@ namespace PaperCutUtility
             }
             Console.WriteLine("\nUpdated {0} users with new card departments.", ldapUsers.Length);
             Console.WriteLine("########################################\r\n");
-        }
+        }   // end SetUsersMultipleDepartmentInfo
 
         /// <summary>
         /// Sets a single department information for all users in papercut.
@@ -418,7 +419,7 @@ namespace PaperCutUtility
                 Console.WriteLine(ex.StackTrace);
             }
             Console.WriteLine("\n########################################\r\n");
-        }
+        }   // end SetUsersSingleDepartmentInfo
 
         /// <summary>
         /// Resolves which cardField must be updated.
@@ -440,7 +441,7 @@ namespace PaperCutUtility
                     break;
             }
             return fieldToUpdate;
-        }
+        }   // end ResolveCardField
 
         /// <summary>
         /// Resolves which department field must be updated.
@@ -462,7 +463,6 @@ namespace PaperCutUtility
                     break;
             }
             return fieldToUpdate;
-        }
-
+        }   // end ResolveDepartmentField
     }   // end class PapercutProxyWrapper
 }

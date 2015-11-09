@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PaperCutUtility.Models
 {
@@ -26,5 +22,5 @@ namespace PaperCutUtility.Models
             return String.Format("Username: {0}, CN: {1}, DepartmentName: {2}, DepartmentNumber: {3}",
                             this.Username, this.FullName, this.DepartmentName, this.DepartmentNumber);
         }
-    }
+    }   // end class LdapUser
 }

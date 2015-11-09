@@ -312,10 +312,7 @@ namespace PaperCutUtility
                             LdapUser[] ldapUsers = ldapHelper.retrieveUserDepartments(ppcUsers, deptNumberADField, deptNameADField);
                             PaperCutProxyWrapper.SetUsersMultipleDepartmentInfo(serverProxy, ldapUsers, targetDeptField);
                         }
-
-                        
-
-                    }   // end if
+                    }
                 }
                 catch (Exception)
                 {
@@ -370,6 +367,5 @@ namespace PaperCutUtility
                 }
             }
         }   // end btnClearDept_Click
-
     }   // end MainWindow
 }   // end PaperCutUtility

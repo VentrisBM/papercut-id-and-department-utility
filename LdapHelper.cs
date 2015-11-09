@@ -71,7 +71,7 @@ namespace PaperCutUtility
             }
 
             return connectionEstablished;
-        }
+        }   // end ldapConnectionEstablished
 
         /// <summary>
         /// Retrieves multiple department information for users from Active Directory.
@@ -184,7 +184,6 @@ namespace PaperCutUtility
             }
 
             return ldapUsers;
-        }   // end retrieveUserDepartments
-
+        }   // end retrieveUserDepartment
     }   // end class LdapHelper
 }

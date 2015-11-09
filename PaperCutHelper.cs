@@ -47,7 +47,7 @@ namespace PaperCutUtility
                 Console.WriteLine("Updated user: {0}, new card number: {1}\r\n", targetUsername, newCardNumber);
                 Console.WriteLine("\n########################################\r\n");
             }
-        }
+        }   // end UpdateSingleCardNumber
 
         /// <summary>
         /// Updates the card numbers for all users.
@@ -99,7 +99,7 @@ namespace PaperCutUtility
                 Console.WriteLine("\nUpdated {0} users with new card numbers.", existingUsers.Length);
                 Console.WriteLine("\n########################################\r\n");
             }
-        }
+        }   // end UpdateAllCardNumbers
 
         /// <summary>
         /// Sends an email notification 
@@ -128,7 +128,7 @@ namespace PaperCutUtility
             {
                 Console.WriteLine("Unable to send email.");
             }
-        }
+        }   // end SendSingleEmail
 
         /// <summary>
         /// Sends an email notification 
@@ -169,8 +169,6 @@ namespace PaperCutUtility
             {
                 Console.WriteLine("Unable to send email.");
             }
-
         }   // end SendMultipleEmails
-
     }   // end class PaperCutHelper
 }

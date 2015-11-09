@@ -36,7 +36,7 @@ namespace PaperCutUtility
                 identifier[i] = AvailableCharacters[pos];
             }
             return new string(identifier);
-        }
+        }   // end GenerateIdentifier
 
         /// <summary>
         /// Generates a number of random identifiers of n length.
@@ -53,6 +53,6 @@ namespace PaperCutUtility
                 identifiers[i] = GenerateIdentifier(lengthOfIdentifier);
             }
             return identifiers;
-        }
-    }
+        }   // end GenerateIdentifiers
+    }   // end class SecurityString
 }
