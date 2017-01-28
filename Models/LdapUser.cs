@@ -2,25 +2,18 @@
 
 namespace PaperCutUtility.Models
 {
-    class LdapUser
+    public class LdapUser
     {
+        #region Properties
         public string Username { get; set; }
         public string FullName { get; set; }
         public string DepartmentName { get; set; }
         public string DepartmentNumber { get; set; }
-
-        public LdapUser()
-        {
-            this.Username = "";
-            this.FullName = "";
-            this.DepartmentName = "";
-            this.DepartmentNumber = "";
-        }
+        #endregion
 
         public override string ToString()
         {
-            return String.Format("Username: {0}, CN: {1}, DepartmentName: {2}, DepartmentNumber: {3}",
-                            this.Username, this.FullName, this.DepartmentName, this.DepartmentNumber);
+            return string.Format("Username: {0}, CN: {1}, DepartmentName: {2}, DepartmentNumber: {3}", Username, FullName, DepartmentName, DepartmentNumber);
         }
-    }   // end class LdapUser
+    }
 }

@@ -94,13 +94,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="LdapHelper.cs" />
+    <Compile Include="Common\Constants.cs" />
+    <Compile Include="Helpers\LdapHelper.cs" />
     <Compile Include="Models\LdapUser.cs" />
-    <Compile Include="Models\PpcUser.cs" />
-    <Compile Include="PaperCutProxyWrapper.cs" />
-    <Compile Include="PaperCutHelper.cs" />
-    <Compile Include="SecurityString.cs" />
-    <Compile Include="ServerCommandProxy.cs" />
+    <Compile Include="Models\PaperCutUser.cs" />
+    <Compile Include="Wrappers\PaperCutProxyWrapper.cs" />
+    <Compile Include="Helpers\PaperCutHelper.cs" />
+    <Compile Include="Helpers\SecurityStringHelper.cs" />
+    <Compile Include="Proxies\ServerCommandProxy.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -137,9 +138,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
